@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 const nav = [
   { href: "/dashboard", label: "情報統合" },
   { href: "/summary", label: "AI要約" },
-  { href: "/actions", label: "アクション" },
 ];
 
 export function Sidebar() {
