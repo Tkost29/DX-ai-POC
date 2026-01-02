@@ -47,7 +47,7 @@ export default function SummaryPage() {
   return (
     <>
       <TopBar
-        title="AI要約・カテゴリー別一覧"
+        title="投稿一覧"
         description="直近1ヶ月の投稿をカテゴリーごとに分類（投稿日時順）"
       />
 
