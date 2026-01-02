@@ -1,14 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { POSTS } from "../../lib/data";
 import { TopBar } from "../../components/TopBar";
 import { PostCard } from "../../components/PostCard";
 import { useApp } from "../../lib/store";
 import { calcRelevance, priorityBucket } from "../../lib/relevance";
 import { labelAction } from "../../lib/actionLabel";
+import { Modal } from "../../components/Modal";
 
 export default function DashboardPage() {
   const { user } = useApp();
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   // 関連度計算と優先度順ソート
   const ranked = [...POSTS]
@@ -25,6 +28,9 @@ export default function DashboardPage() {
     SHARE_RECOMMENDED: { text: "共有推奨", cls: "warn" },
     FYI: { text: "参考情報", cls: "ok" },
   };
+
+  // 選択された投稿を取得
+  const selectedPost = selectedPostId ? POSTS.find(p => p.id === selectedPostId) : null;
 
   return (
     <>
@@ -73,10 +79,29 @@ export default function DashboardPage() {
                   <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>
                     💡 {action.reason}
                   </div>
-                  <div className="row">
+                  <div className="row" style={{ marginBottom: 10 }}>
                     {rel.reasons.map((r: string, i: number) => (
                       <span key={i} className="badge">{r}</span>
                     ))}
+                  </div>
+                  {/* ボタン群 */}
+                  <div className="row" style={{ gap: 8 }}>
+                    <button 
+                      className="btn" 
+                      onClick={() => setSelectedPostId(p.id)}
+                      style={{ fontSize: 13, padding: "6px 12px" }}
+                    >
+                      📄 AI要約を見る
+                    </button>
+                    {p.url && (
+                      <button 
+                        className="btn" 
+                        onClick={() => window.open(p.url, '_blank')}
+                        style={{ fontSize: 13, padding: "6px 12px" }}
+                      >
+                        🔗 元投稿を開く
+                      </button>
+                    )}
                   </div>
                 </div>
               }
@@ -84,6 +109,39 @@ export default function DashboardPage() {
           );
         })}
       </div>
+
+      {/* AI要約モーダル */}
+      <Modal 
+        open={!!selectedPost} 
+        onClose={() => setSelectedPostId(null)}
+        title="AI要約（200-300字）"
+      >
+        {selectedPost && (
+          <div className="card">
+            <h3 style={{ marginBottom: 10 }}>{selectedPost.title}</h3>
+            <div style={{ 
+              padding: 14, 
+              background: "rgba(255,255,255,0.02)", 
+              borderRadius: 8,
+              lineHeight: 1.8,
+              color: "var(--text)"
+            }}>
+              {selectedPost.aiSummary || "AI要約がまだ生成されていません。"}
+            </div>
+            {selectedPost.url && (
+              <div style={{ marginTop: 12 }}>
+                <button 
+                  className="btn" 
+                  onClick={() => window.open(selectedPost.url, '_blank')}
+                  style={{ fontSize: 13 }}
+                >
+                  🔗 元投稿を開く
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </>
   );
 }

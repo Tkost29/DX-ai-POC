@@ -8,6 +8,8 @@ export type Post = {
   author: string;
   createdAt: string; // ISO
   tags: string[];
+  url?: string; // 投稿元URL
+  aiSummary?: string; // AI要約（200-300字）
 };
 
 export type UserContext = {
