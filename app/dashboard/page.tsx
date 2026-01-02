@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { POSTS } from "../../lib/data";
 import { TopBar } from "../../components/TopBar";
 import { PostCard } from "../../components/PostCard";
@@ -11,6 +12,7 @@ import { Modal } from "../../components/Modal";
 
 export default function DashboardPage() {
   const { user } = useApp();
+  const router = useRouter();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   // 関連度計算と優先度順ソート
@@ -96,7 +98,7 @@ export default function DashboardPage() {
                     {p.url && (
                       <button 
                         className="btn" 
-                        onClick={() => window.open(p.url, '_blank')}
+                        onClick={() => router.push(p.url!)}
                         style={{ fontSize: 13, padding: "6px 12px" }}
                       >
                         🔗 元投稿を開く
