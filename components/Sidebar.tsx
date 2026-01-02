@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const nav = [
-  { href: "/dashboard", label: "統合" },
-  { href: "/priority", label: "優先表示" },
+  { href: "/dashboard", label: "情報統合" },
   { href: "/summary", label: "AI要約" },
   { href: "/actions", label: "アクション" },
 ];
