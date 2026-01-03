@@ -75,7 +75,7 @@ export default function DashboardPage() {
                       優先度: {bucket}（score={rel.score}）
                     </span>
                     <span className={`badge label ${actionInfo.cls}`}>
-                      AI提案: {actionInfo.text}
+                      {actionInfo.text}
                     </span>
                   </div>
                   <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>
