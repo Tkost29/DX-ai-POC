@@ -2,11 +2,20 @@ import { Post, UserContext, Relevance } from "./types";
 
 /**
  * 投稿とユーザーの関連度を計算
- * タグの一致度と部署の関連性を考慮してスコアリング
+ * 優先順位：
+ * 1. 緊急度（urgent = +1000点）
+ * 2. 関連タグの一致数
+ * 3. その他の関連性
  */
 export function calcRelevance(post: Post, user: UserContext): Relevance {
   let score = 0;
   const reasons: string[] = [];
+
+  // 【最優先】緊急度
+  if (post.urgency === "urgent") {
+    score += 1000; // 緊急投稿は圧倒的に優先
+    reasons.push("🚨 緊急対応");
+  }
 
   // タグの一致度
   const matchingTags = post.tags.filter((tag) => user.interests.includes(tag));
@@ -40,8 +49,10 @@ export function calcRelevance(post: Post, user: UserContext): Relevance {
 
 /**
  * 優先度バケットを判定
+ * 緊急投稿は必ずHighになる
  */
 export function priorityBucket(score: number): "High" | "Medium" | "Low" {
+  if (score >= 1000) return "High"; // 緊急投稿
   if (score >= 8) return "High";
   if (score >= 4) return "Medium";
   return "Low";

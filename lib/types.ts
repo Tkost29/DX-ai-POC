@@ -1,5 +1,7 @@
 export type Source = "SKY_NOW" | "SKY_WIZ" | "BLOG";
 
+export type Urgency = "urgent" | "normal";
+
 export type Post = {
   id: string;
   title: string;
@@ -10,6 +12,7 @@ export type Post = {
   tags: string[];
   url?: string; // 投稿元URL
   aiSummary?: string; // AI要約（200-300字）
+  urgency: Urgency; // 緊急度
 };
 
 export type UserContext = {
